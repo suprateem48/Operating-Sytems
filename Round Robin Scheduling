@@ -1,0 +1,74 @@
+//
+//  main.cpp
+//  RR1
+//
+//  Created by Suprateem Banerjee on 05/05/19.
+//  Copyright © 2019 Suprateem Banerjee. All rights reserved.
+//
+
+#include <iostream>
+using namespace std;
+int main(int argc, const char * argv[])
+{
+    int n;
+    cout<<"Enter number of processes:"<<endl;
+    cin>>n;
+    int pid[n],bt[n],i,at[n];
+    cout<<"Enter Process IDs:"<<endl;
+    for(i=0;i<n;i++)
+    {
+        cin>>pid[i];
+    }
+    cout<<"Enter Burst Times:"<<endl;
+    int cbt[n],wt[n],tt[n];
+    for(i=0;i<n;i++)
+    {
+        cin>>bt[i];
+        cbt[i]=bt[i];
+    }
+    cout<<"Enter Arrival Times:"<<endl;
+    for(i=0;i<n;i++)
+    {
+        cin>>at[i];
+    }
+    bool done=false;
+    int q=4,ts=0;
+    cout<<"Gantt Chart:"<<endl;
+    while(!done)
+    {
+        done=true;
+        for(i=0;i<n;i++)
+        {
+            if(bt[i]>0&&ts>=at[i])
+            {
+                done=false;
+                if(bt[i]>q)
+                {
+                    bt[i]=bt[i]-q;
+                    ts+=q;
+                    cout<<"P"<<pid[i]<<" ("<<ts<<") ";
+                }
+                else
+                {
+                    ts+=bt[i];
+                    wt[i]=ts-cbt[i]-at[i];
+                    bt[i]=0;
+                    cout<<"P"<<pid[i]<<" ("<<ts<<") ";
+                }
+            }
+        }
+    }
+    cout<<endl;
+    double awt=0,att=0;
+    for(i=0;i<n;i++)
+    {
+        tt[i]=cbt[i]+wt[i];
+        awt=awt+wt[i];
+        att=att+tt[i];
+    }
+    att=att/(double)n;
+    awt=awt/(double)n;
+    cout<<"Average Waiting Time: "<<awt<<endl;
+    cout<<"Average Turnaround Time: "<<att<<endl;
+    return 0;
+}
